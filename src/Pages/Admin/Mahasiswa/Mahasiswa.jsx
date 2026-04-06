@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import AdminLayout from '@/Components/templates/AdminLayout';
+import { Link } from 'react-router-dom';
+import { mahasiswaList } from '@/Data/Dummy';
 import Modal from '@/Components/organisms/Modal';
 import Button from '@/Components/atoms/Button';
 import Card from '@/Components/molecules/Card';
@@ -7,13 +8,7 @@ import Heading from '@/Components/atoms/Heading';
 
 export default function Mahasiswa() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [students, setStudents] = useState([
-    { id: 1, nim: '20211002', nama: 'Siti Aminah' },
-    { id: 2, nim: '20211003', nama: 'Ahmad Fauzi' },
-    { id: 3, nim: '20211004', nama: 'Dewi Lestari' },
-    { id: 4, nim: '20211005', nama: 'Rudi Hartono' },
-    { id: 5, nim: '20211001', nama: 'Budi Santoso' },
-  ]);
+  const [students] = useState(mahasiswaList);
 
   const handleAddStudent = (e) => {
     e.preventDefault();
@@ -32,7 +27,7 @@ export default function Mahasiswa() {
   };
 
   return (
-    <AdminLayout>
+    <>
       <Card>
         <div className="flex justify-between items-center mb-4">
           <Heading as="h2" spacing="mb-0" align="left">Daftar Mahasiswa</Heading>
@@ -54,6 +49,9 @@ export default function Mahasiswa() {
                 <td className="py-2 px-4">{student.nim}</td>
                 <td className="py-2 px-4">{student.nama}</td>
                 <td className="py-2 px-4 text-center space-x-2">
+                  <Link to={`/admin/mahasiswa/${student.nim}`}>
+                    <Button variant="info" size="sm">Detail</Button>
+                  </Link>
                   <Button variant="warning" size="sm" onClick={handleEdit}>Edit</Button>
                   <Button variant="danger" size="sm" onClick={handleDelete}>Hapus</Button>
                 </td>
@@ -69,6 +67,6 @@ export default function Mahasiswa() {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddStudent}
       />
-    </AdminLayout>
+    </>
   );
 }

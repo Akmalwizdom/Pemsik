@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import AuthLayout from '@/Components/templates/AuthLayout';
+import { dummyUser } from '@/Data/Dummy';
 import Card from '@/Components/molecules/Card';
 import Form from '@/Components/molecules/Form';
 import Heading from '@/Components/atoms/Heading';
@@ -17,45 +17,44 @@ export default function Login() {
     const email = formData.get('email');
     const password = formData.get('password');
     
-    if (email && password) {
+    if (email === dummyUser.email && password === dummyUser.password) {
+      localStorage.setItem('user', JSON.stringify({ email: dummyUser.email, nama: dummyUser.nama }));
       alert('Login berhasil!');
       navigate('/admin');
     } else {
-      alert('Email dan password wajib diisi!');
+      alert('Email atau password salah!');
     }
   };
 
   return (
-    <AuthLayout>
-      <Card>
-        <Heading>Login</Heading>
+    <Card>
+      <Heading>Login</Heading>
+      
+      <Form onSubmit={handleLogin}>
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input type="email" id="email" name="email" placeholder="Masukkan email" required />
+        </div>
         
-        <Form onSubmit={handleLogin}>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" name="email" placeholder="Masukkan email" required />
-          </div>
-          
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input type="password" id="password" name="password" placeholder="Masukkan password" required />
-          </div>
-          
-          <div className="flex justify-between items-center">
-            <label className="flex items-center">
-              <input type="checkbox" className="mr-2" />
-              <span className="text-sm text-gray-600">Ingat saya</span>
-            </label>
-            <Link to="#">Lupa password?</Link>
-          </div>
-          
-          <Button type="submit" className="w-full">Login</Button>
-        </Form>
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input type="password" id="password" name="password" placeholder="Masukkan password" required />
+        </div>
         
-        <p className="text-sm text-center text-gray-600 mt-4">
-          Belum punya akun? <Link to="#">Daftar</Link>
-        </p>
-      </Card>
-    </AuthLayout>
+        <div className="flex justify-between items-center">
+          <label className="flex items-center">
+            <input type="checkbox" className="mr-2" />
+            <span className="text-sm text-gray-600">Ingat saya</span>
+          </label>
+          <Link to="#">Lupa password?</Link>
+        </div>
+        
+        <Button type="submit" className="w-full">Login</Button>
+      </Form>
+      
+      <p className="text-sm text-center text-gray-600 mt-4">
+        Belum punya akun? <Link to="#">Daftar</Link>
+      </p>
+    </Card>
   );
 }

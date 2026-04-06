@@ -6,6 +6,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
     alert('Logout berhasil!');
     navigate('/login');
   };

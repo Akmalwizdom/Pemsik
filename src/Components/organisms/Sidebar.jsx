@@ -7,18 +7,18 @@ export default function Sidebar() {
         <span className="text-2xl font-bold hidden lg:block">Admin</span>
       </div>
       <nav className="p-4 space-y-2">
-        <NavLink 
-          to="/dashboard"
-          className={({ isActive }) => 
+        <NavLink
+          to="/admin/dashboard"
+          className={({ isActive }) =>
             `flex items-center space-x-2 px-4 py-2 rounded ${isActive ? 'bg-blue-700' : 'hover:bg-blue-700'}`
           }
         >
           <span className="text-lg">🏠</span>
           <span className="menu-text hidden lg:inline">Dashboard</span>
         </NavLink>
-        <NavLink 
-          to="/admin"
-          className={({ isActive }) => 
+        <NavLink
+          to="/admin/mahasiswa"
+          className={({ isActive }) =>
             `flex items-center space-x-2 px-4 py-2 rounded ${isActive ? 'bg-blue-700' : 'hover:bg-blue-700'}`
           }
         >

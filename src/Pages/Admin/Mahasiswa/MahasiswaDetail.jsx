@@ -40,6 +40,12 @@ export default function MahasiswaDetail() {
           <p className="text-sm text-gray-500">Nama</p>
           <p className="text-lg font-semibold text-gray-800">{mahasiswa.nama}</p>
         </div>
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <p className="text-sm text-gray-500">Status</p>
+          <span className={`px-2 py-1 rounded text-xs font-semibold ${mahasiswa.status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+            {mahasiswa.status ? 'Aktif' : 'Tidak Aktif'}
+          </span>
+        </div>
       </div>
     </Card>
   );

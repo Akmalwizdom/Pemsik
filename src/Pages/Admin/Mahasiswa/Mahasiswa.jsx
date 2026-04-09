@@ -1,22 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { mahasiswaList } from '@/Data/Dummy';
 import Card from '@/Components/molecules/Card';
 import Heading from '@/Components/atoms/Heading';
 import Button from '@/Components/atoms/Button';
+import Input from '@/Components/atoms/Input';
 import MahasiswaModal from './MahasiswaModal';
 import MahasiswaTable from './MahasiswaTable';
 
 export default function Mahasiswa() {
-  // State mahasiswa: menyimpan daftar mahasiswa
   const [mahasiswa, setMahasiswa] = useState(mahasiswaList);
-
-  // State selected mahasiswa: menyimpan objek mahasiswa yang dipilih untuk edit
   const [selectedMahasiswa, setSelectedMahasiswa] = useState(null);
-
-  // State modal: mengatur buka/tutup modal
   const [isModalOpen, setModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredMahasiswa, setFilteredMahasiswa] = useState(mahasiswa);
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredMahasiswa(mahasiswa);
+    } else {
+      const keyword = searchTerm.toLowerCase();
+      const filtered = mahasiswa.filter(
+        (mhs) =>
+          mhs.nim.toLowerCase().includes(keyword) ||
+          mhs.nama.toLowerCase().includes(keyword)
+      );
+      setFilteredMahasiswa(filtered);
+    }
+  }, [searchTerm, mahasiswa]);
 
-  // storeMahasiswa: tambah mahasiswa baru ke state mahasiswa
   const storeMahasiswa = (data) => {
     const newMahasiswa = {
       id: mahasiswa.length > 0 ? Math.max(...mahasiswa.map((m) => m.id)) + 1 : 1,
@@ -27,7 +37,6 @@ export default function Mahasiswa() {
     setMahasiswa([...mahasiswa, newMahasiswa]);
   };
 
-  // updateMahasiswa: update mahasiswa berdasarkan nim dari state mahasiswa
   const updateMahasiswa = (data) => {
     setMahasiswa(
       mahasiswa.map((mhs) =>
@@ -38,31 +47,26 @@ export default function Mahasiswa() {
     );
   };
 
-  // deleteMahasiswa: delete mahasiswa berdasarkan nim dari state mahasiswa
   const deleteMahasiswa = (nim) => {
     setMahasiswa(mahasiswa.filter((mhs) => mhs.nim !== nim));
   };
 
-  // openAddModal: buka modal untuk tambah, set null pada selectedMahasiswa
   const openAddModal = () => {
     setModalOpen(true);
     setSelectedMahasiswa(null);
   };
 
-  // openEditModal: buka modal untuk edit, set objek mahasiswa pada selectedMahasiswa
   const openEditModal = (mahasiswaObj) => {
     setModalOpen(true);
     setSelectedMahasiswa(mahasiswaObj);
   };
 
-  // handleSubmit: kondisi ketika selectedMahasiswa terisi maka update, ketika tidak maka store
   const handleSubmit = (formData) => {
     if (selectedMahasiswa) {
       if (!window.confirm('Apakah Anda yakin ingin mengubah data mahasiswa ini?')) return;
       updateMahasiswa(formData);
       alert('Data mahasiswa berhasil diperbarui!');
     } else {
-      // Cek apakah NIM sudah ada
       const nimExists = mahasiswa.find((mhs) => mhs.nim === formData.nim.trim());
       if (nimExists) {
         alert('NIM sudah terdaftar!');
@@ -74,7 +78,6 @@ export default function Mahasiswa() {
     setModalOpen(false);
   };
 
-  // handleDelete: menerima parameter nim mahasiswa untuk dipassing ke deleteMahasiswa
   const handleDelete = (nim) => {
     if (!window.confirm('Apakah Anda yakin ingin menghapus mahasiswa ini?')) return;
     deleteMahasiswa(nim);
@@ -91,15 +94,22 @@ export default function Mahasiswa() {
           </Button>
         </div>
 
-        {/* Komponen MahasiswaTable: passing props mahasiswa, openEditModal, onDelete */}
+        <div className="mb-4">
+          <Input
+            type="text"
+            placeholder="🔍 Cari berdasarkan NIM atau Nama..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
         <MahasiswaTable
-          mahasiswa={mahasiswa}
+          mahasiswa={filteredMahasiswa}
           openEditModal={openEditModal}
           onDelete={handleDelete}
         />
       </Card>
 
-      {/* Komponen MahasiswaModal: passing props isModalOpen, onClose, onSubmit, selectedMahasiswa */}
       <MahasiswaModal
         isModalOpen={isModalOpen}
         onClose={() => setModalOpen(false)}

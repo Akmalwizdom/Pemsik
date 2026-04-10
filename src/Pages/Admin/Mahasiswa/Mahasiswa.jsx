@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { mahasiswaList } from '@/Data/Dummy';
+import { confirmDelete, confirmUpdate } from '@/Utils/Helpers/SwalHelpers';
+import { toastSuccess, toastError } from '@/Utils/Helpers/ToastHelpers';
 import Card from '@/Components/molecules/Card';
 import Heading from '@/Components/atoms/Heading';
 import Button from '@/Components/atoms/Button';
@@ -63,25 +65,30 @@ export default function Mahasiswa() {
 
   const handleSubmit = (formData) => {
     if (selectedMahasiswa) {
-      if (!window.confirm('Apakah Anda yakin ingin mengubah data mahasiswa ini?')) return;
-      updateMahasiswa(formData);
-      alert('Data mahasiswa berhasil diperbarui!');
+      confirmUpdate(() => {
+        updateMahasiswa(formData);
+        toastSuccess('Data mahasiswa berhasil diperbarui!');
+        setModalOpen(false);
+      });
     } else {
       const nimExists = mahasiswa.find((mhs) => mhs.nim === formData.nim.trim());
       if (nimExists) {
-        alert('NIM sudah terdaftar!');
+        toastError('NIM sudah terdaftar!');
         return;
       }
-      storeMahasiswa(formData);
-      alert('Mahasiswa berhasil ditambahkan!');
+      confirmUpdate(() => {
+        storeMahasiswa(formData);
+        toastSuccess('Mahasiswa berhasil ditambahkan!');
+        setModalOpen(false);
+      });
     }
-    setModalOpen(false);
   };
 
   const handleDelete = (nim) => {
-    if (!window.confirm('Apakah Anda yakin ingin menghapus mahasiswa ini?')) return;
-    deleteMahasiswa(nim);
-    alert('Mahasiswa berhasil dihapus!');
+    confirmDelete(() => {
+      deleteMahasiswa(nim);
+      toastSuccess('Mahasiswa berhasil dihapus!');
+    });
   };
 
   return (

@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { confirmLogout } from '@/Utils/Helpers/SwalHelpers';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    alert('Logout berhasil!');
-    navigate('/login');
+    confirmLogout(() => {
+      localStorage.removeItem('user');
+      navigate('/login');
+    });
   };
 
   return (

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { dummyUser } from '@/Data/Dummy';
+import { toastSuccess, toastError } from '@/Utils/Helpers/ToastHelpers';
 import Card from '@/Components/molecules/Card';
 import Form from '@/Components/molecules/Form';
 import Heading from '@/Components/atoms/Heading';
@@ -19,10 +20,10 @@ export default function Login() {
     
     if (email === dummyUser.email && password === dummyUser.password) {
       localStorage.setItem('user', JSON.stringify({ email: dummyUser.email, nama: dummyUser.nama }));
-      alert('Login berhasil!');
+      toastSuccess('Login Berhasil!');
       navigate('/admin');
     } else {
-      alert('Email atau password salah!');
+      toastError('Login Gagal! Email atau password salah.');
     }
   };
 

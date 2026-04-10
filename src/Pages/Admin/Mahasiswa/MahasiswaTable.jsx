@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Button from '@/Components/atoms/Button';
 
 export default function MahasiswaTable({ mahasiswa, openEditModal, onDelete }) {
-  // handleDelete: panggil onDelete dengan parameter nim mahasiswa
+
   const handleDelete = (nim) => {
     onDelete(nim);
   };
